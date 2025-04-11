@@ -10,7 +10,7 @@ class Usertbl extends Model{
 
     // column sa table
     protected $fillable = [
-        'username', 'password', 'gender',
+        'username', 'password', 'gender', 'jobid',
     ];
 
     protected $hidden = [
