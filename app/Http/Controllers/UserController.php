@@ -71,27 +71,33 @@ Class UserController extends Controller {
     * Update an existing author
     * @return Illuminate\Http\Response
     */
-    public function update(Request $request,$id){
+    public function update(Request $request, $id)
+    {
         $rules = [
             'username' => 'max:20',
             'password' => 'max:20',
             'gender' => 'in:Male,Female',
             'jobid' => 'numeric|min:1|not_in:0',
         ];
-
+    
         $this->validate($request, $rules);
-        // validate if Jobid is found in the table tbluserjob
-        $userjob = UserJob::findOrFail($request->jobid); 
+    
+        // Only check jobid if it was provided
+        if ($request->has('jobid')) {
+            $userjob = UserJob::findOrFail($request->jobid);
+        }
+    
         $user = Usertbl::findOrFail($id);
         $user->fill($request->all());
-
-        // if no changes happen
+    
         if ($user->isClean()) {
-        return $this->errorResponse('At least one value must change', Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->errorResponse('At least one value must change', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
+    
         $user->save();
+    
         return $this->successResponse($user);
+    
         // old code
         /*
         $this->validate($request, $rules);
