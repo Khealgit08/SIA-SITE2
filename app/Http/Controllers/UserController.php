@@ -73,17 +73,15 @@ Class UserController extends Controller {
     */
     public function update(Request $request,$id){
         $rules = [
-            'username' => 'sometimes|max:20',
-            'password' => 'sometimes|max:20',
-            'gender' => 'sometimes|in:Male,Female',
-            'jobid' => 'sometimes|numeric|min:1|not_in:0',
+            'username' => 'max:20',
+            'password' => 'max:20',
+            'gender' => 'in:Male,Female',
+            'jobid' => 'numeric|min:1|not_in:0',
         ];
 
         $this->validate($request, $rules);
         // validate if Jobid is found in the table tbluserjob
-        if ($request->has('jobid')) {
-            $userjob = UserJob::findOrFail($request->jobid);
-        }           
+        $userjob = UserJob::findOrFail($request->jobid); 
         $user = Usertbl::findOrFail($id);
         $user->fill($request->all());
 
